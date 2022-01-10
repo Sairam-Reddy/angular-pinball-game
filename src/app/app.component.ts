@@ -5,9 +5,7 @@ import {
   VERSION,
   ViewChild,
 } from '@angular/core';
-import { Bodies, Vertices } from 'matter-js';
-import Matter = require('matter-js');
-// import * as Matter from 'matter-js';
+import * as Matter from 'matter-js';
 
 @Component({
   selector: 'my-app',
@@ -421,16 +419,21 @@ export class AppComponent implements AfterViewInit {
 
   // bodies created from SVG paths
   private path(x, y, path) {
-    return Bodies.fromVertices(x, y, [Matter.Svg.pathToVertices(path, 30)], {
-      isStatic: true,
-      render: {
-        fillStyle: this.COLOR.OUTER,
+    return Matter.Bodies.fromVertices(
+      x,
+      y,
+      [Matter.Svg.pathToVertices(path, 30)],
+      {
+        isStatic: true,
+        render: {
+          fillStyle: this.COLOR.OUTER,
 
-        // add stroke and line width to fill in slight gaps between fragments
-        strokeStyle: this.COLOR.OUTER,
-        lineWidth: 1,
-      },
-    });
+          // add stroke and line width to fill in slight gaps between fragments
+          strokeStyle: this.COLOR.OUTER,
+          lineWidth: 1,
+        },
+      }
+    );
   }
 
   // round bodies that repel pinball
