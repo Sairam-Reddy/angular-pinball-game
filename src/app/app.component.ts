@@ -422,7 +422,7 @@ export class AppComponent implements AfterViewInit {
     return Matter.Bodies.fromVertices(
       x,
       y,
-      [Matter.Svg.pathToVertices(path, 30)],
+      [Matter.Vertices.fromPath(path, {})],
       {
         isStatic: true,
         render: {
