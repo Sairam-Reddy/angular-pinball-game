@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import * as Matter from 'matter-js';
 import { Vertices } from 'matter-js';
-// import decomp = require('poly-decomp');
+import decomp = require('poly-decomp');
 
 @Component({
   selector: 'my-app',
@@ -62,7 +62,7 @@ export class AppComponent implements AfterViewInit {
   private isRightPaddleUp;
 
   public ngAfterViewInit(): void {
-    // Matter.Common.setDecomp(decomp);
+    Matter.Common.setDecomp(decomp);
 
     this.load();
   }
@@ -427,21 +427,17 @@ export class AppComponent implements AfterViewInit {
 
   // bodies created from SVG paths
   private path(x, y, path) {
-    return Matter.Bodies.fromVertices(
-      x,
-      y,
-      [Vertices.fromPath(path, undefined)],
-      {
-        isStatic: true,
-        render: {
-          fillStyle: this.COLOR.OUTER,
+    const vertices = Vertices.fromPath(path, undefined);
+    return Matter.Bodies.fromVertices(x, y, [vertices], {
+      isStatic: true,
+      render: {
+        fillStyle: this.COLOR.OUTER,
 
-          // add stroke and line width to fill in slight gaps between fragments
-          strokeStyle: this.COLOR.OUTER,
-          lineWidth: 1,
-        },
-      }
-    );
+        // add stroke and line width to fill in slight gaps between fragments
+        strokeStyle: this.COLOR.OUTER,
+        lineWidth: 1,
+      },
+    });
   }
 
   // round bodies that repel pinball
