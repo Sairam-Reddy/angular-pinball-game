@@ -218,8 +218,8 @@ export class AppComponent implements AfterViewInit {
       },
     });
     Object.keys(paddleLeft).forEach((piece: any) => {
-      if (piece) {
-        piece.collisionFilter.group = paddleGroup;
+      if (piece && paddleLeft[piece]) {
+        paddleLeft[piece].collisionFilter.group = paddleGroup;
       }
     });
     paddleLeft.con = Matter.Constraint.create({
@@ -271,8 +271,8 @@ export class AppComponent implements AfterViewInit {
       },
     });
     Object.keys(paddleRight).forEach((piece: any) => {
-      if (piece) {
-        piece.collisionFilter.group = paddleGroup;
+      if (piece && paddleRight[piece]) {
+        paddleRight[piece].collisionFilter.group = paddleGroup;
       }
     });
     paddleRight.con = Matter.Constraint.create({
