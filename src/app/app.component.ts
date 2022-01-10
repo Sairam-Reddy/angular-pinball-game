@@ -13,7 +13,7 @@ import * as Matter from 'matter-js';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements AfterViewInit {
-  @ViewChild('container') container: ElementRef;
+  @ViewChild('elem') elem: ElementRef;
 
   // constants
   public PATHS = {
@@ -85,7 +85,7 @@ export class AppComponent implements AfterViewInit {
 
     // render (shared)
     this.render = Matter.Render.create({
-      element: this.container.nativeElement,
+      element: this.elem.nativeElement,
       engine: this.engine,
       options: {
         width: this.world.bounds.max.x,
