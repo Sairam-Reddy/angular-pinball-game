@@ -6,7 +6,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as Matter from 'matter-js';
-import * as decomp from 'poly-decomp';
+import { Vertices } from 'matter-js';
+// import decomp = require('poly-decomp');
 
 @Component({
   selector: 'my-app',
@@ -425,7 +426,7 @@ export class AppComponent implements AfterViewInit {
     return Matter.Bodies.fromVertices(
       x,
       y,
-      [Matter.Vertices.fromPath(path, undefined)],
+      [Vertices.fromPath(path, undefined)],
       {
         isStatic: true,
         render: {
