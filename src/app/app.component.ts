@@ -308,41 +308,18 @@ export class AppComponent implements AfterViewInit {
 
   private createEvents() {
     // events for when the pinball hits stuff
-    Matter.Events.on(this.engine, 'collisionStart', (event) => {
-      let pairs = event.pairs;
-      pairs.forEach(function (pair) {
-        if (pair.bodyB.label === 'pinball') {
-          switch (pair.bodyA.label) {
-            case 'reset':
-              this.launchPinball();
-              break;
-            case 'bumper':
-              this.pingBumper(pair.bodyA);
-              break;
-          }
-        }
-      });
-    });
+    Matter.Events.on(
+      this.engine,
+      'collisionStart',
+      this.handleCollisionStart.bind(this)
+    );
 
     // regulate pinball
-    Matter.Events.on(this.engine, 'beforeUpdate', (event) => {
-      // bumpers can quickly multiply velocity, so keep that in check
-      Matter.Body.setVelocity(this.pinball, {
-        x: Math.max(
-          Math.min(this.pinball.velocity.x, this.MAX_VELOCITY),
-          -this.MAX_VELOCITY
-        ),
-        y: Math.max(
-          Math.min(this.pinball.velocity.y, this.MAX_VELOCITY),
-          -this.MAX_VELOCITY
-        ),
-      });
-
-      // cheap way to keep ball from going back down the shooter lane
-      if (this.pinball.position.x > 450 && this.pinball.velocity.y > 0) {
-        Matter.Body.setVelocity(this.pinball, { x: 0, y: -10 });
-      }
-    });
+    Matter.Events.on(
+      this.engine,
+      'beforeUpdate',
+      this.handlebeforeUpdate.bind(this)
+    );
 
     // mouse drag (god mode for grabbing pinball)
     Matter.World.add(
@@ -375,6 +352,41 @@ export class AppComponent implements AfterViewInit {
     this.isRightPaddleUp = false;
   }
 
+  private handleCollisionStart(event): void {
+    let pairs = event.pairs;
+    pairs.forEach((pair) => {
+      if (pair.bodyB.label === 'pinball') {
+        switch (pair.bodyA.label) {
+          case 'reset':
+            this.launchPinball();
+            break;
+          case 'bumper':
+            this.pingBumper(pair.bodyA);
+            break;
+        }
+      }
+    });
+  }
+
+  private handlebeforeUpdate(event): void {
+    // bumpers can quickly multiply velocity, so keep that in check
+    Matter.Body.setVelocity(this.pinball, {
+      x: Math.max(
+        Math.min(this.pinball.velocity.x, this.MAX_VELOCITY),
+        -this.MAX_VELOCITY
+      ),
+      y: Math.max(
+        Math.min(this.pinball.velocity.y, this.MAX_VELOCITY),
+        -this.MAX_VELOCITY
+      ),
+    });
+
+    // cheap way to keep ball from going back down the shooter lane
+    if (this.pinball.position.x > 450 && this.pinball.velocity.y > 0) {
+      Matter.Body.setVelocity(this.pinball, { x: 0, y: -10 });
+    }
+  }
+
   private launchPinball() {
     this.updateScore(0);
     Matter.Body.setPosition(this.pinball, { x: 465, y: 765 });
@@ -387,7 +399,7 @@ export class AppComponent implements AfterViewInit {
 
     // flash color
     bumper.render.fillStyle = this.COLOR.BUMPER_LIT;
-    setTimeout(function () {
+    setTimeout(() => {
       bumper.render.fillStyle = this.COLOR.BUMPER;
     }, 100);
   }
@@ -472,7 +484,7 @@ export class AppComponent implements AfterViewInit {
       plugin: {
         attractors: [
           // stopper is always a, other body is b
-          function (a, b) {
+          (a, b) => {
             if (b.label === attracteeLabel) {
               let isPaddleUp =
                 side === 'left' ? this.isLeftPaddleUp : this.isRightPaddleUp;
