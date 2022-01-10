@@ -61,7 +61,7 @@ export class AppComponent implements AfterViewInit {
   private isRightPaddleUp;
 
   public ngAfterViewInit(): void {
-    Matter.Common.setDecomp(decomp);
+    // Matter.Common.setDecomp(decomp);
 
     this.load();
   }
@@ -425,7 +425,7 @@ export class AppComponent implements AfterViewInit {
     return Matter.Bodies.fromVertices(
       x,
       y,
-      [Matter.Vertices.fromPath(path, {})],
+      [Matter.Vertices.fromPath(path, undefined)],
       {
         isStatic: true,
         render: {
