@@ -8,6 +8,7 @@ import {
 import * as Matter from 'matter-js';
 import { Vertices } from 'matter-js';
 import decomp = require('poly-decomp');
+import MatterAttractors = require('matter-attractors');
 
 @Component({
   selector: 'my-app',
@@ -63,6 +64,7 @@ export class AppComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     Matter.Common.setDecomp(decomp);
+    Matter.use(MatterAttractors);
 
     this.load();
   }
