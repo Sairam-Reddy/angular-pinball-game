@@ -1,10 +1,34 @@
-<div class="container">
+<div
+  $container
+  class="container"
+  tabindex="0"
+  (keyup.arrowleft)="setLeftPaddleDown($event)"
+  (keyup.arrowright)="setRightPaddleDown($event)"
+  (keydown.arrowleft)="setLeftPaddleUp($event)"
+  (keydown.arrowright)="setRightPaddleUp($event)"
+>
   <div class="score current-score">
     score<br /><span>{{ currentScore }}</span>
   </div>
   <div class="score high-score">
     high score<br /><span>{{ highScore }}</span>
   </div>
-  <button class="trigger left-trigger">tap!</button>
-  <button class="trigger right-trigger">tap!</button>
+  <button
+    class="trigger left-trigger"
+    (mousedown)="setLeftPaddleUp($event)"
+    (touchstart)="setLeftPaddleUp($event)"
+    (mouseup)="setLeftPaddleDown($event)"
+    (touchend)="setLeftPaddleDown($event)"
+  >
+    tap!
+  </button>
+  <button
+    class="trigger right-trigger"
+    (mousedown)="setRightPaddleUp($event)"
+    (touchstart)="setRightPaddleUp($event)"
+    (mouseup)="setRightPaddleDown($event)"
+    (touchend)="setRightPaddleDown($event)"
+  >
+    tap!
+  </button>
 </div>

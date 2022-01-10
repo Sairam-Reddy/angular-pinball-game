@@ -1,4 +1,10 @@
-import { AfterViewInit, Component, VERSION } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  VERSION,
+  ViewChild,
+} from '@angular/core';
 import { Bodies, Vertices } from 'matter-js';
 import Matter = require('matter-js');
 // import * as Matter from 'matter-js';
@@ -9,6 +15,8 @@ import Matter = require('matter-js');
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements AfterViewInit {
+  @ViewChild('container') container: ElementRef;
+
   // constants
   public PATHS = {
     DOME: '0 0 0 250 19 250 20 231.9 25.7 196.1 36.9 161.7 53.3 129.5 74.6 100.2 100.2 74.6 129.5 53.3 161.7 36.9 196.1 25.7 231.9 20 268.1 20 303.9 25.7 338.3 36.9 370.5 53.3 399.8 74.6 425.4 100.2 446.7 129.5 463.1 161.7 474.3 196.1 480 231.9 480 250 500 250 500 0 0 0',
@@ -79,7 +87,7 @@ export class AppComponent implements AfterViewInit {
 
     // render (shared)
     this.render = Matter.Render.create({
-      element: $('.container')[0],
+      element: this.container.nativeElement,
       engine: this.engine,
       options: {
         width: this.world.bounds.max.x,
@@ -343,42 +351,22 @@ export class AppComponent implements AfterViewInit {
         }),
       })
     );
+  }
 
-    // keyboard paddle events
-    $('body').on('keydown', function (e) {
-      if (e.which === 37) {
-        // left arrow key
-        this.isLeftPaddleUp = true;
-      } else if (e.which === 39) {
-        // right arrow key
-        this.isRightPaddleUp = true;
-      }
-    });
-    $('body').on('keyup', function (e) {
-      if (e.which === 37) {
-        // left arrow key
-        this.isLeftPaddleUp = false;
-      } else if (e.which === 39) {
-        // right arrow key
-        this.isRightPaddleUp = false;
-      }
-    });
+  public setLeftPaddleUp(event): void {
+    this.isLeftPaddleUp = true;
+  }
 
-    // click/tap paddle events
-    $('.left-trigger')
-      .on('mousedown touchstart', function (e) {
-        this.isLeftPaddleUp = true;
-      })
-      .on('mouseup touchend', function (e) {
-        this.isLeftPaddleUp = false;
-      });
-    $('.right-trigger')
-      .on('mousedown touchstart', function (e) {
-        this.isRightPaddleUp = true;
-      })
-      .on('mouseup touchend', function (e) {
-        this.isRightPaddleUp = false;
-      });
+  public setLeftPaddleDown(event): void {
+    this.isLeftPaddleUp = false;
+  }
+
+  public setRightPaddleUp(event): void {
+    this.isRightPaddleUp = true;
+  }
+
+  public setRightPaddleDown(event): void {
+    this.isRightPaddleUp = false;
   }
 
   private launchPinball() {
