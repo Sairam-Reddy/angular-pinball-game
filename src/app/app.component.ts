@@ -6,6 +6,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import * as Matter from 'matter-js';
+import * as decomp from 'poly-decomp';
 
 @Component({
   selector: 'my-app',
@@ -60,6 +61,8 @@ export class AppComponent implements AfterViewInit {
   private isRightPaddleUp;
 
   public ngAfterViewInit(): void {
+    Matter.Common.setDecomp(decomp);
+
     this.load();
   }
 
