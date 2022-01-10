@@ -1,4 +1,4 @@
-import { Component, VERSION } from '@angular/core';
+import { AfterViewInit, Component, VERSION } from '@angular/core';
 // import Matter = require('matter-js');
 import * as Matter from 'matter-js';
 
@@ -7,7 +7,7 @@ import * as Matter from 'matter-js';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   // constants
   public PATHS = {
     DOME: '0 0 0 250 19 250 20 231.9 25.7 196.1 36.9 161.7 53.3 129.5 74.6 100.2 100.2 74.6 129.5 53.3 161.7 36.9 196.1 25.7 231.9 20 268.1 20 303.9 25.7 338.3 36.9 370.5 53.3 399.8 74.6 425.4 100.2 446.7 129.5 463.1 161.7 474.3 196.1 480 231.9 480 250 500 250 500 0 0 0',
@@ -38,8 +38,8 @@ export class AppComponent {
   // shared variables
   private currentScore;
   private highScore;
-  private engine;
-  private world;
+  private engine: Matter.Engine;
+  private world: Matter.World;
   private render;
   private pinball;
   private stopperGroup;
@@ -51,6 +51,10 @@ export class AppComponent {
   private rightUpStopper;
   private rightDownStopper;
   private isRightPaddleUp;
+
+  public ngAfterViewInit(): void {
+    this.load();
+  }
 
   private load() {
     this.init();
@@ -170,7 +174,13 @@ export class AppComponent {
     let paddleGroup = Matter.Body.nextGroup(true);
 
     // Left paddle mechanism
-    let paddleLeft = {};
+    let paddleLeft = {
+      paddle: undefined,
+      brick: undefined,
+      comp: undefined,
+      hinge: undefined,
+      con: undefined,
+    };
     paddleLeft.paddle = Matter.Bodies.trapezoid(170, 660, 20, 80, 0.33, {
       label: 'paddleLeft',
       angle: 1.57,
@@ -196,7 +206,7 @@ export class AppComponent {
         visible: false,
       },
     });
-    Object.keys(paddleLeft).forEach((piece) => {
+    Object.keys(paddleLeft).forEach((piece: any) => {
       piece.collisionFilter.group = paddleGroup;
     });
     paddleLeft.con = Matter.Constraint.create({
@@ -214,7 +224,13 @@ export class AppComponent {
     Matter.Body.rotate(paddleLeft.comp, 0.57, { x: 142, y: 660 });
 
     // right paddle mechanism
-    let paddleRight = {};
+    let paddleRight = {
+      paddle: undefined,
+      brick: undefined,
+      comp: undefined,
+      hinge: undefined,
+      con: undefined,
+    };
     paddleRight.paddle = Matter.Bodies.trapezoid(280, 660, 20, 80, 0.33, {
       label: 'paddleRight',
       angle: -1.57,
@@ -240,7 +256,7 @@ export class AppComponent {
         visible: false,
       },
     });
-    Object.values(paddleRight).forEach((piece) => {
+    Object.keys(paddleRight).forEach((piece: any) => {
       piece.collisionFilter.group = paddleGroup;
     });
     paddleRight.con = Matter.Constraint.create({
@@ -316,12 +332,12 @@ export class AppComponent {
       this.world,
       Matter.MouseConstraint.create(this.engine, {
         mouse: Matter.Mouse.create(this.render.canvas),
-        constraint: {
+        constraint: Matter.Constraint.create({
           stiffness: 0.2,
           render: {
             visible: false,
           },
-        },
+        }),
       })
     );
 
@@ -365,7 +381,7 @@ export class AppComponent {
   private launchPinball() {
     this.updateScore(0);
     Matter.Body.setPosition(this.pinball, { x: 465, y: 765 });
-    Matter.Body.setVelocity(this.pinball, { x: 0, y: -25 + rand(-2, 2) });
+    Matter.Body.setVelocity(this.pinball, { x: 0, y: -25 + this.rand(-2, 2) });
     Matter.Body.setAngularVelocity(this.pinball, 0);
   }
 
@@ -415,8 +431,8 @@ export class AppComponent {
   }
 
   // bodies created from SVG paths
-  private path(x, y, path) {
-    let vertices = Matter.Vertices.fromPath(path);
+  private path(x, y, path: string) {
+    let vertices: Array<any> = Matter.Vertices.fromPath(path);
     return Matter.Bodies.fromVertices(x, y, vertices, {
       isStatic: true,
       render: {
