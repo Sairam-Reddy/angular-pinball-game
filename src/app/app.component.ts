@@ -308,7 +308,7 @@ export class AppComponent implements AfterViewInit {
 
   private createEvents() {
     // events for when the pinball hits stuff
-    Matter.Events.on(this.engine, 'collisionStart', function (event) {
+    Matter.Events.on(this.engine, 'collisionStart', (event) => {
       let pairs = event.pairs;
       pairs.forEach(function (pair) {
         if (pair.bodyB.label === 'pinball') {
@@ -325,7 +325,7 @@ export class AppComponent implements AfterViewInit {
     });
 
     // regulate pinball
-    Matter.Events.on(this.engine, 'beforeUpdate', function (event) {
+    Matter.Events.on(this.engine, 'beforeUpdate', (event) => {
       // bumpers can quickly multiply velocity, so keep that in check
       Matter.Body.setVelocity(this.pinball, {
         x: Math.max(
