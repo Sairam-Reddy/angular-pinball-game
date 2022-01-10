@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, VERSION } from '@angular/core';
-// import Matter = require('matter-js');
-import * as Matter from 'matter-js';
+import { Bodies, Vertices } from 'matter-js';
+import Matter = require('matter-js');
+// import * as Matter from 'matter-js';
 
 @Component({
   selector: 'my-app',
@@ -36,8 +37,8 @@ export class AppComponent implements AfterViewInit {
   // private $highScore = $('.high-score span');
 
   // shared variables
-  private currentScore;
-  private highScore;
+  public currentScore;
+  public highScore;
   private engine: Matter.Engine;
   private world: Matter.World;
   private render;
@@ -221,7 +222,8 @@ export class AppComponent implements AfterViewInit {
       paddleLeft.hinge,
       paddleLeft.con,
     ]);
-    Matter.Body.rotate(paddleLeft.comp, 0.57, { x: 142, y: 660 });
+    Matter.Body.setPosition(paddleLeft.comp, Matter.Vector.create(142, 660));
+    Matter.Body.rotate(paddleLeft.comp, 0.57);
 
     // right paddle mechanism
     let paddleRight = {
@@ -271,7 +273,8 @@ export class AppComponent implements AfterViewInit {
       paddleRight.hinge,
       paddleRight.con,
     ]);
-    Matter.Body.rotate(paddleRight.comp, -0.57, { x: 308, y: 660 });
+    Matter.Body.setPosition(paddleRight.comp, Matter.Vector.create(308, 660));
+    Matter.Body.rotate(paddleRight.comp, -0.57);
   }
 
   private createPinball() {
@@ -397,10 +400,8 @@ export class AppComponent implements AfterViewInit {
 
   private updateScore(newCurrentScore) {
     this.currentScore = newCurrentScore;
-    $currentScore.text(this.currentScore);
 
     this.highScore = Math.max(this.currentScore, this.highScore);
-    $highScore.text(this.highScore);
   }
 
   // matter.js has a built in random range function, but it is deterministic
@@ -431,9 +432,8 @@ export class AppComponent implements AfterViewInit {
   }
 
   // bodies created from SVG paths
-  private path(x, y, path: string) {
-    let vertices: Array<any> = Matter.Vertices.fromPath(path);
-    return Matter.Bodies.fromVertices(x, y, vertices, {
+  private path(x, y, path) {
+    return Bodies.fromVertices(x, y, [Matter.Svg.pathToVertices(path, 30)], {
       isStatic: true,
       render: {
         fillStyle: this.COLOR.OUTER,
