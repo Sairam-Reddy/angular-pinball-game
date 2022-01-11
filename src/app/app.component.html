@@ -1,12 +1,4 @@
-<div
-  #elem
-  class="container"
-  tabindex="0"
-  (keyup.arrowleft)="setLeftPaddleDown($event)"
-  (keyup.arrowright)="setRightPaddleDown($event)"
-  (keydown.arrowleft)="setLeftPaddleUp($event)"
-  (keydown.arrowright)="setRightPaddleUp($event)"
->
+<div #elem class="container">
   <div class="score current-score">
     score<br /><span>{{ currentScore }}</span>
   </div>

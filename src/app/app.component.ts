@@ -2,7 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  VERSION,
+  HostListener,
   ViewChild,
 } from '@angular/core';
 import * as Matter from 'matter-js';
@@ -41,10 +41,6 @@ export class AppComponent implements AfterViewInit {
   public PADDLE_PULL = 0.002;
   public MAX_VELOCITY = 50;
 
-  // score elements
-  // private $currentScore = $('.current-score span');
-  // private $highScore = $('.high-score span');
-
   // shared variables
   public currentScore = 0;
   public highScore = 0;
@@ -61,6 +57,16 @@ export class AppComponent implements AfterViewInit {
   private rightUpStopper;
   private rightDownStopper;
   private isRightPaddleUp;
+
+  @HostListener('window.keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    console.log(event);
+  }
+
+  @HostListener('window.keyup', ['$event'])
+  handleKeyUp(event: KeyboardEvent) {
+    console.log(event);
+  }
 
   public ngAfterViewInit(): void {
     Matter.Common.setDecomp(decomp);
