@@ -46,8 +46,8 @@ export class AppComponent implements AfterViewInit {
   // private $highScore = $('.high-score span');
 
   // shared variables
-  public currentScore;
-  public highScore;
+  public currentScore = 0;
+  public highScore = 0;
   private engine: Matter.Engine;
   private world: Matter.World;
   private render;
@@ -328,12 +328,12 @@ export class AppComponent implements AfterViewInit {
       this.world,
       Matter.MouseConstraint.create(this.engine, {
         mouse: Matter.Mouse.create(this.render.canvas),
-        constraint: Matter.Constraint.create({
+        constraint: {
           stiffness: 0.2,
           render: {
             visible: false,
           },
-        }),
+        } as Matter.Constraint,
       })
     );
   }
