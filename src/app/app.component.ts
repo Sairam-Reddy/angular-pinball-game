@@ -58,14 +58,22 @@ export class AppComponent implements AfterViewInit {
   private rightDownStopper;
   private isRightPaddleUp;
 
-  @HostListener('window.keydown', ['$event'])
+  @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
-    console.log(event);
+    if (event.code === 'ArrowLeft') {
+      this.setLeftPaddleUp(event);
+    } else if (event.code === 'ArrowRight') {
+      this.setRightPaddleUp(event);
+    }
   }
 
-  @HostListener('window.keyup', ['$event'])
+  @HostListener('window:keyup', ['$event'])
   handleKeyUp(event: KeyboardEvent) {
-    console.log(event);
+    if (event.code === 'ArrowLeft') {
+      this.setLeftPaddleDown(event);
+    } else if (event.code === 'ArrowRight') {
+      this.setRightPaddleDown(event);
+    }
   }
 
   public ngAfterViewInit(): void {
